@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Tweets</h1>
+
+<ul>
+    {% for tweet in tweets %}
+    <li>{{tweet.user.username}} - {{tweet.text}}
+        {% if session['user_id'] == tweet.user_id %}
+        <form action="/tweets/{{tweet.id}}", method="POST">
+            <button>Delete</button>
+        </form>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
+
+<form method="POST">
+
+    {{ form.hidden_tag() }}
+
+    {% for field in form
+    if field.widget.input_type != 'hidden' %}
+    <p>
+        {{ field.label }}
+        {{ field(class_="form-control") }}
+
+        {% for error in field.errors %}
+        <span class="form-text text-danger">{{ error }}</span>
+        {% endfor %}
+    </p>
+    {% endfor %}
+    <button>Submit</button>
+</form>
+
+{% endblock %}
